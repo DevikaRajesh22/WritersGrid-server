@@ -4,6 +4,7 @@ import otpGenerate from "../infrastructure/utils/otpGenerate";
 import JWTtoken from "../infrastructure/utils/JWTtoken";
 import sendMail from "../infrastructure/utils/sendMail";
 import hashPassword from "../infrastructure/utils/hashPassword";
+import Cloudinary from "../infrastructure/utils/cloudinary";
 import jwt from 'jsonwebtoken'
 
 class userUseCase {
@@ -12,19 +13,22 @@ class userUseCase {
     private otpGenerate: otpGenerate
     private sendMail: sendMail
     private hashPassword: hashPassword
+    private cloudinary: Cloudinary
 
     constructor(
         iUserRepository: IUserRepository,
         JWTtoken: JWTtoken,
         otpGenerate: otpGenerate,
         sendMail: sendMail,
-        hashPassword: hashPassword
+        hashPassword: hashPassword,
+        Cloudinary:Cloudinary
     ) {
         this.iUserRepository = iUserRepository
         this.JWTtoken = JWTtoken
         this.otpGenerate = otpGenerate
         this.sendMail = sendMail
         this.hashPassword = hashPassword
+        this.cloudinary=Cloudinary
     }
 
     async findUser(userInfo: User) {
@@ -97,6 +101,20 @@ class userUseCase {
         try{
             const user=await this.iUserRepository.findUserById(userId)
             return user
+        }catch(error){
+            console.log(error)
+        }
+    }
+
+    async updateProfile(id:string,userInfo:User){
+        try{
+            let userExists=await this.iUserRepository.findUserById(id)
+            if(userExists){
+                let uploadImage=await this.cloudinary.saveToCloudinary(userInfo.image)
+                userInfo.image=uploadImage
+                let res=await this.iUserRepository.updateUser(id,userInfo)
+                return res
+            }
         }catch(error){
             console.log(error)
         }

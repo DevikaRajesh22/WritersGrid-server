@@ -103,7 +103,7 @@ class userController {
                     sameSite: 'none'
                 });
                 return res.status(200).json({ success: true, token: user.token });
-            }else if(!user?.success){
+            } else if (!user?.success) {
                 return res.status(200).json({ success: false, message: user?.message });
             }
         } catch (error) {
@@ -112,20 +112,59 @@ class userController {
         }
     }
 
-    async profile(req:Request,res:Response){
-        try{
-            const userId=req.userId
-            if(userId){
-                const userProfile=await this.usercase.userGetProfile(userId)
-                if(userProfile){
+    async profile(req: Request, res: Response) {
+        try {
+            const userId = req.userId
+            if (userId) {
+                const userProfile = await this.usercase.userGetProfile(userId)
+                if (userProfile) {
                     return res.status(200).json({ success: true, userProfile })
-                }else{
+                } else {
                     return res.status(401).json({ success: false, message: 'Authentication error' })
                 }
-            }else{
+            } else {
                 return res.status(401).json({ success: false, message: 'User id not found' })
             }
-        }catch(error){
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: 'Internal server error' })
+        }
+    }
+
+    async logout(req: Request, res: Response) {
+        try {
+            res.cookie('userToken', "", {
+                httpOnly: true,
+                expires: new Date(0),
+            });
+            res.status(200).json({ success: true });
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: 'Internal server error' })
+        }
+    }
+
+    async editProfile(req: Request, res: Response) {
+        try {
+            const userId = req.userId
+            const userInfo: User = req.body
+            const imageFile: Express.Multer.File | undefined = req.file;
+            if (imageFile) {
+                userInfo.image = imageFile.path
+            } else {
+                userInfo.image = ''
+            }
+            if (userId) {
+                const updateData = await this.usercase.updateProfile(userId, userInfo)
+                if (updateData) {
+                    res.status(200).json({ success: true })
+                } else {
+                    res.status(401).json({ success: false, message: 'Not updated!' })
+                }
+            } else {
+                res.status(401).json({ success: false, message: "Something went wrong!Try again!" })
+            }
+        } catch (error) {
             console.log(error)
             return res.status(500).json({ success: false, message: 'Internal server error' })
         }
