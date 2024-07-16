@@ -1,5 +1,5 @@
 import mongoose, { Schema, Model } from "mongoose";
-import User from "@/domain/user";
+import User from "../../domain/user";
 
 const userSchema: Schema<User> = new Schema({
     name: {
@@ -27,5 +27,5 @@ const userSchema: Schema<User> = new Schema({
     }
 });
 
-const UserModel: Model<User> = mongoose.model<User>('buyer', userSchema);
+const UserModel: Model<User> = mongoose.model<User>('user', userSchema);
 export { UserModel };
