@@ -116,7 +116,14 @@ class userController {
         try{
             const userId=req.userId
             if(userId){
-                const userProfile=await this.usercase.userGetProfile()
+                const userProfile=await this.usercase.userGetProfile(userId)
+                if(userProfile){
+                    return res.status(200).json({ success: true, userProfile })
+                }else{
+                    return res.status(401).json({ success: false, message: 'Authentication error' })
+                }
+            }else{
+                return res.status(401).json({ success: false, message: 'User id not found' })
             }
         }catch(error){
             console.log(error)

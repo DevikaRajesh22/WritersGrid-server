@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import cookieParser from 'cookie-parser';
 import userRoute from '../routes/userRoute';
-import adminRoute from '../routes/adminRoute';
 import http from 'http'
 
 export const createServer=()=>{
@@ -20,7 +19,6 @@ export const createServer=()=>{
             })
         )
         app.use('/api/user', userRoute)
-        app.use('/api/admin', adminRoute)
         const server = http.createServer(app)
         return server
     }catch(error){

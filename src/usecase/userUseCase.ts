@@ -92,6 +92,15 @@ class userUseCase {
             console.log(error)
         }
     }
+
+    async userGetProfile(userId:string){
+        try{
+            const user=await this.iUserRepository.findUserById(userId)
+            return user
+        }catch(error){
+            console.log(error)
+        }
+    }
 }
 
 export default userUseCase
