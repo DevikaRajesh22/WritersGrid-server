@@ -36,7 +36,7 @@ class articleRepository implements IArticleRepository {
 
     async findArticleById(articleId: string): Promise<any> {
         try {
-            const article = await ArticleModel.findOne({ _id: articleId })
+            const article = await ArticleModel.findOne({ _id: articleId }).populate('userId')
             if (article) {
                 return article
             }
