@@ -63,6 +63,17 @@ class articleUseCase {
             console.log(error)
         }
     }
+
+    async updateArticle(id: string, title: string, content: string, image: any) {
+        try {
+            let uploadImage = await this.cloudinary.saveToCloudinary(image)
+            image = uploadImage
+            let res = await this.iArticleRepository.updateArticle(id, title, content, image)
+            return res
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
 
 export default articleUseCase

@@ -162,7 +162,7 @@ class userController {
                     res.status(401).json({ success: false, message: 'Not updated!' })
                 }
             } else {
-                res.status(401).json({ success: false, message: "Something went wrong!Try again!" })
+                res.status(401).json({ success: false, message: "Something went wrong !! Try again!" })
             }
         } catch (error) {
             console.log(error)

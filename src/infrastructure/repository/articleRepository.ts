@@ -46,6 +46,24 @@ class articleRepository implements IArticleRepository {
             return false
         }
     }
+
+    async updateArticle(id: string, title: string, content: string, image: any): Promise<any> {
+        try {
+            const updatedArticle = await ArticleModel.findByIdAndUpdate(
+                id,
+                {
+                    title: title,
+                    content: content,
+                    image: image
+                },
+                { new: true }
+            );
+            return updatedArticle ? true : false;
+        } catch (error) {
+            console.log(error)
+            return null
+        }
+    }
 }
 
 export default articleRepository

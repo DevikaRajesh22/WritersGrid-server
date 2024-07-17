@@ -8,15 +8,16 @@ import { uploadFile } from "../middleware/multer";
 import Cloudinary from "../utils/cloudinary";
 
 const repository = new articleRepository()
-const userrepository=new userRepository()
-const cloud=new Cloudinary()
-const articlecase = new articleUseCase(repository,userrepository,cloud)
+const userrepository = new userRepository()
+const cloud = new Cloudinary()
+const articlecase = new articleUseCase(repository, userrepository, cloud)
 const controller = new articleController(articlecase)
 
 const router = express.Router()
 
-router.post('/newArticle', authenticate, uploadFile.single('image'), (req, res) => { controller.newArticle(req,res) })
-router.get('/getArticles',authenticate,(req,res)=>{controller.getArticles(req,res)})
-router.get('/findArticleById',(req,res)=>{controller.findArticle(req,res)})
+router.post('/newArticle', authenticate, uploadFile.single('image'), (req, res) => { controller.newArticle(req, res) })
+router.get('/getArticles', authenticate, (req, res) => { controller.getArticles(req, res) })
+router.get('/findArticleById', (req, res) => { controller.findArticle(req, res) })
+router.put('/editArticle', authenticate, uploadFile.single('image'), (req, res) => { controller.editArticle(req, res) });
 
 export default router

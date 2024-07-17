@@ -67,6 +67,28 @@ class articleController {
             return res.status(500).json({ success: false, message: 'Internal server error' })
         }
     }
+
+    async editArticle(req: Request, res: Response) {
+        try {
+            const { id, title, content } = req.body
+            const imageFile: Express.Multer.File | undefined = req.file;
+            let image
+            if (imageFile) {
+                image = imageFile.path
+            } else {
+                image = ''
+            }
+            const updateData = await this.articlecase.updateArticle(id, title, content, image)
+            if (updateData) {
+                res.status(200).json({ success: true })
+            } else {
+                res.status(401).json({ success: false, message: 'Not updated!' })
+            }
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: 'Internal server error' })
+        }
+    }
 }
 
 export default articleController
