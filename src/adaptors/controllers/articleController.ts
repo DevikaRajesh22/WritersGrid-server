@@ -89,6 +89,37 @@ class articleController {
             return res.status(500).json({ success: false, message: 'Internal server error' })
         }
     }
+
+    async deleteArticle(req: Request, res: Response) {
+        try {
+            const articleId = req.query.articleId as string
+            if (articleId) {
+                const deleted = await this.articlecase.deleteArticle(articleId)
+                if (deleted?.success) {
+                    res.status(200).json({ success: true })
+                } else if (!deleted?.success) {
+                    res.status(200).json({ success: false })
+                }
+            }
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: 'Internal server error' })
+        }
+    }
+
+    async getAllArticles(req: Request, res: Response) {
+        try {
+            const articles = await this.articlecase.getAllArticles()
+            if (articles) {
+                res.status(200).json({ success: true, data: articles })
+            } else {
+                res.status(200).json({ success: false, message: 'No articles found !!' })
+            }
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: 'Internal server error' })
+        }
+    }
 }
 
 export default articleController

@@ -1,8 +1,8 @@
 import Article from "../../domain/article";
 import { ArticleModel } from "../database/articleModel";
 import IArticleRepository from "../../usecase/interface/IArticleRepository";
-import { ObjectId } from "mongoose";
-import { title } from "process";
+import { ObjectId } from 'mongodb';
+import { Document } from 'mongoose';
 
 class articleRepository implements IArticleRepository {
     async addArticle(id: string, articleInfo: Article): Promise<any> {
@@ -63,6 +63,33 @@ class articleRepository implements IArticleRepository {
             console.log(error)
             return null
         }
+    }
+
+    async deleteArticle(articleId: string): Promise<any> {
+        try {
+            const deletedArticle = await ArticleModel.findByIdAndDelete(articleId);
+            if (articleId) {
+                return true
+            }
+            return false
+        } catch (error) {
+            console.log(error)
+            return null
+        }
+    }
+
+    async getAllArticles(): Promise<Article[]> {
+        const articles: Article[] = await ArticleModel.find().populate('userId').exec();
+        const typedArticles: Article[] = articles.map((article) => ({
+            id: article._id,
+            title: article.title,
+            content: article.content,
+            image: article.image,
+            userId: article.userId,
+            creationTime: article.creationTime
+        }));
+    
+        return typedArticles;
     }
 }
 

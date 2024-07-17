@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 interface Article{
-    _id?:string,
+    _id?:mongoose.Schema.Types.ObjectId,
     userId: mongoose.Schema.Types.ObjectId,
     title:string,
     content:string,

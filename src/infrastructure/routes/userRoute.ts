@@ -26,8 +26,8 @@ router.post('/verifyMail', (req, res) => { controller.verifyMail(req, res) });
 router.post('/verifyOtp', (req, res) => { controller.verifyOtp(req, res) });
 router.post('/resendOtp', (req, res) => { controller.resendOtp(req, res) });
 router.post('/login', (req, res) => { controller.login(req, res) });
-router.get('/profile', authenticate, (req, res) => { controller.profile(req, res) });
 router.post('/logout', (req, res) => { controller.logout(req, res) });
+router.get('/profile', authenticate, (req, res) => { controller.profile(req, res) });
 router.put('/editProfile', authenticate, uploadFile.single('image'), (req, res) => controller.editProfile(req, res));
 
 

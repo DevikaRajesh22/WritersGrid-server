@@ -74,6 +74,31 @@ class articleUseCase {
             console.log(error)
         }
     }
+
+    async deleteArticle(articleId: string) {
+        try {
+            let deletedArticle = await this.iArticleRepository.deleteArticle(articleId)
+            if (deletedArticle) {
+                return { success: true }
+            } else {
+                return { success: false }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async getAllArticles(){
+        try{
+            const articles=await this.iArticleRepository.getAllArticles()
+            if (articles) {
+                return articles
+            }
+            return null
+        }catch(error){
+            console.log(error)
+        }
+    }
 }
 
 export default articleUseCase

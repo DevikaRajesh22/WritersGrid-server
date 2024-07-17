@@ -17,7 +17,9 @@ const router = express.Router()
 
 router.post('/newArticle', authenticate, uploadFile.single('image'), (req, res) => { controller.newArticle(req, res) })
 router.get('/getArticles', authenticate, (req, res) => { controller.getArticles(req, res) })
-router.get('/findArticleById', (req, res) => { controller.findArticle(req, res) })
+router.get('/findArticleById', authenticate, (req, res) => { controller.findArticle(req, res) })
 router.put('/editArticle', authenticate, uploadFile.single('image'), (req, res) => { controller.editArticle(req, res) });
+router.delete('/deleteArticle', authenticate, (req, res) => { controller.deleteArticle(req, res) });
+router.get('/getAllArticles', authenticate, (req, res) => { controller.getAllArticles(req, res) });
 
 export default router
