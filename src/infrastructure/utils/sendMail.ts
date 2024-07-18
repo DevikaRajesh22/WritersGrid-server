@@ -33,12 +33,12 @@ class sendMail implements INodeMailer {
         });
     }
 
-    forgotSendOtp(email: string, verificationCode: string): void {
+    forgotSendOtp(name:string,email: string, verificationCode: string): void {
         const mailOptions = {
             from: process.env.EMAIL,
             to: email,
             subject: 'Password Reset OTP',
-            text: `Your OTP for password reset is: ${verificationCode}`
+            text: `Hello ${name},\n\nYour OTP for password reset is: ${verificationCode}`
         };
 
         this.transporter.sendMail(mailOptions, (err, info) => {

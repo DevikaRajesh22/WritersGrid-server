@@ -5,6 +5,7 @@ interface IUserRepository {
     saveUser(user: User): Promise<User | null>,
     findUserById(id: string): Promise<User | null>,
     updateUser(id: string, user: User): Promise<any>,
+    resetPassword(email: string, hashedPassword: string): Promise<any>,
 }
 
 export default IUserRepository

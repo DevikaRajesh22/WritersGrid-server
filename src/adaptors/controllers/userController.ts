@@ -131,6 +131,65 @@ class userController {
         }
     }
 
+    async forgotPassword(req: Request, res: Response) {
+        try {
+            const { email } = req.body
+            const userExist = await this.usercase.forgotPassword(email)
+            if (userExist?.data.data) {
+                const token = userExist.data.token
+                res.status(200).json({ success: true, token: token });
+            } else {
+                res.status(200).json({ success: false })
+            }
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: 'Internal server error' });
+        }
+    }
+
+    async verifyOtpForgotPassword(req: Request, res: Response) {
+        try {
+            let token = req.headers.authorization?.split(" ")[1] as string;
+            const userOtp: string = req.body.otp
+            const save = await this.usercase.saveUserForgot(token, userOtp)
+            if (save?.success) {
+                res.cookie('userToken', save?.token, {
+                    expires: new Date(Date.now() + 25892000000),
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'none'
+                });
+                return res.status(200).json({ success: true, token: save.token })
+            } else {
+                return res.status(200).json({ success: false, message: "Invalid otp" })
+            }
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: 'Internal server error' });
+        }
+    }
+
+    async resetPassword(req: Request, res: Response) {
+        try {
+            let token = req.headers.authorization?.split(" ")[1] as string;
+            const { email, password } = req.body
+            const userFound = await this.usercase.findUserByEmail(email)
+            if (userFound) {
+                let updatePassword = await this.usercase.updatePassword(email, password, token)
+                if (updatePassword?.success) {
+                    res.status(200).json({ success: true, message: 'Successfully logged in', token: updatePassword.token })
+                } else if (!updatePassword?.success) {
+                    res.status(200).json({ success: false, message: 'Something went wrong' })
+                }
+            } else {
+                res.status(200).json({ success: false, message: 'No user found with this email !' })
+            }
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ success: false, message: 'Internal server error' });
+        }
+    }
+
     async logout(req: Request, res: Response) {
         try {
             res.cookie('userToken', "", {

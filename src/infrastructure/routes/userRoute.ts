@@ -15,9 +15,9 @@ const otp = new otpGenerate()
 const jwt = new JWTtoken()
 const mail = new sendMail()
 const hashPwd = new hashPassword()
-const cloud=new Cloudinary()
+const cloud = new Cloudinary()
 
-const usercase = new userUseCase(repository, jwt, otp, mail, hashPwd,cloud)
+const usercase = new userUseCase(repository, jwt, otp, mail, hashPwd, cloud)
 const controller = new userController(usercase)
 
 const router = express.Router()
@@ -27,6 +27,9 @@ router.post('/verifyOtp', (req, res) => { controller.verifyOtp(req, res) });
 router.post('/resendOtp', (req, res) => { controller.resendOtp(req, res) });
 router.post('/login', (req, res) => { controller.login(req, res) });
 router.post('/logout', (req, res) => { controller.logout(req, res) });
+router.post('/forgotPassword', (req, res) => { controller.forgotPassword(req, res) });
+router.post('/verifyOtpForgotPassword', (req, res) => { controller.verifyOtpForgotPassword(req, res) });
+router.post('/resetPassword',(req,res)=>{controller.resetPassword(req,res)});
 router.get('/profile', authenticate, (req, res) => { controller.profile(req, res) });
 router.put('/editProfile', authenticate, uploadFile.single('image'), (req, res) => controller.editProfile(req, res));
 

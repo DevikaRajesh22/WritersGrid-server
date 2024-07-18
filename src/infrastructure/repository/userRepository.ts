@@ -47,6 +47,19 @@ class userRepository implements IUserRepository {
             return null
         }
     }
+
+    async resetPassword(email: string, hashedPassword: string): Promise<any> {
+        try{
+            let updatePassword=await UserModel.updateOne({email},{password:hashedPassword})
+            if(updatePassword){
+                return true
+            }
+            return false
+        }catch(error){
+            console.log(error)
+            return null
+        }
+    }
 }
 
 export default userRepository
